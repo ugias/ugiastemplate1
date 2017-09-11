@@ -1,0 +1,438 @@
+<div class="container container-single">
+  <h2>Create New Account</h2>
+  <form (ngSubmit)="onSubmit()" #registrationForm="ngForm">
+    <div class="row">
+      <fieldset>
+        <legend>Contact Details</legend>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Salutation *
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <select class="form-control input-small" required [ngModel]="user.salutationCode" (ngModelChange)="GenderOnSalutationChange($event)"
+                name="salutation" #salutation="ngModel">
+                <option *ngFor="let s of salutations" [value]="s">{{s}}</option>                
+              </select>
+              <div [hidden]="salutation.valid || salutation.pristine" class="alert alert-danger">
+                Salutation is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Given Name *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel" placeholder="Given Name"
+                (blur)="onInputBlur($event.target.value)">
+              <div [hidden]="firstName.valid || firstName.pristine" class="alert alert-danger">
+                Given Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Middle Name
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="user.middleName" name="middleName" #middleName="ngModel" placeholder="Middle Name">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Last Name *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel" placeholder="Last Name"
+                (blur)="onInputBlur($event.target.value)">
+              <div [hidden]="lastName.valid || lastName.pristine" class="alert alert-danger">
+                Last Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Prefered Name
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.displayName" name="displayName" #displayName="ngModel"
+                placeholder="Prefered Name">
+              <div [hidden]="displayName.valid || displayName.pristine" class="alert alert-danger">
+                Prefered Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="row">
+          <div class="col-md-3 input-label">
+            DOB *
+          </div>
+          <div class="col-md-5 col-sm-6 col-xs-12 input-small-fixed">
+            <div class="form-group">
+              <div class="input-group input-small cec-datepicker">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dob1" [ngModel]="ngbDateOfBirth" (ngModelChange)="onDateOfBirthChange($event)"
+                  ngbDatepicker #dob1="ngbDatepicker" required readonly>
+                <div class="input-group-addon" (click)="dob1.toggle()">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
+              <!--<input type="date" class="form-control input-small" required [(ngModel)]="user.dateOfBirth" name="dateOfBirth" #dateOfBirth="ngModel"
+                (blur)="onInputBlur($event.target.value)">
+              <div [hidden]="dateOfBirth.valid || dateOfBirth.pristine" class="alert alert-danger">
+                Date of birth is required
+              </div>-->
+            <!--<input type="date" name="myBirthday" [(ngModel)]="myBirthday" useValueAsDate>-->
+              
+            <!--</div>
+          </div>
+          <div class="col-md-2 col-sm-12 input-label">
+            Gender
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-12">
+            <div class="form-group">
+              <select class="form-control input-small" [(ngModel)]="user.gender" name="gender" #gender="ngModel" aria-placeholder="Gender">
+                <option *ngFor="let g of genders" [value]="g.code">{{g.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>-->
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Gender
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <select class="form-control input-small" [(ngModel)]="user.gender" name="gender" #gender="ngModel" aria-placeholder="Gender">
+                <option *ngFor="let g of genders" [value]="g.code">{{g.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            DOB *
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <div class="input-group input-small cec-datepicker">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dob1" [ngModel]="ngbDateOfBirth" (ngModelChange)="onDateOfBirthChange($event)"
+                  ngbDatepicker #dob1="ngbDatepicker" required readonly>
+                <div class="input-group-addon" (click)="dob1.toggle()">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Mobile
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.mobile" name="mobile" #mobile="ngModel" placeholder="Mobile">
+              <div [hidden]="mobile.valid || mobile.pristine" class="alert alert-danger">
+                Mobile is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Diocese *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" required [ngModel]="user.dioceseId" (ngModelChange)="GetOrganisationListByDioceseId($event)"
+                name="dioceseId" #dioceseId="ngModel" aria-placeholder="Diocese">
+                <option *ngFor="let d of dioceseList" [value]="d.dioceseId">{{d.dioceseName}}</option>
+              </select>
+              <div [hidden]="dioceseId.valid || dioceseId.pristine" class="alert alert-danger">
+                Diocese is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Organisation *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" required [(ngModel)]="user.organisations[0].extOrganisationId" name="extOrganisationId" #extOrganisationId="ngModel"
+                aria-placeholder="Organisation">
+                  <option *ngFor="let o of organisations" [value]="o.publicId">{{o.externalId}} {{o.name}} {{o.locationSuburb}}</option>
+              </select>
+              <div [hidden]="extOrganisationId.valid || extOrganisationId.pristine" class="alert alert-danger">
+                Organisation is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Position *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" [ngModel]="user.organisations[0].jobTitle" (ngModelChange)="onJobTitleChange($event)" name="jobTitle"
+                #jobTitle="ngModel">
+                    <option *ngFor="let d of jobTitleList" [value]="d.name">{{d.name}}</option>
+                </select>
+              <div [hidden]="jobTitle.value !== 'Other'" class="custom-warning-alert">
+                (please complete "Other Position" in row below)
+              </div>
+              <div [hidden]="jobTitle.valid || jobTitle.pristine" class="alert alert-danger">
+                Position is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Other Position <span *ngIf="jobTitle.value === 'Other'">*</span>
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.organisations[0].otherJobTitle" name="otherJobTitle" #otherJobTitle="ngModel"
+                [disabled]="jobTitle.value !== 'Other'">
+              <div [hidden]="otherJobTitle.valid || otherJobTitle.pristine || jobTitle.value !== 'Other'" class="alert alert-danger">
+                Other Position is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Email *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.organisations[0].email" name="email" #email="ngModel" placeholder="Primary email address">
+              <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                E-mail address is required!
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <p></p>
+    <div class="row">
+      <fieldset>
+        <legend>Login Details</legend>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Login Name *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.userId" name="userId" #userId="ngModel" readonly>
+              <div [hidden]="userId.valid || userId.pristine" class="alert alert-danger">
+                Login Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Password *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="password" class="form-control" required [(ngModel)]="user.password" name="password" #password="ngModel" placeholder="Password" pattern="^(?=.*?[A-Z])(?=.*?[0-9])([^\n]*).{6,}$">
+              <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                <div *ngIf="password.errors && password.errors.required">
+                  password is required!
+                </div>
+                <div *ngIf="password.errors && password.errors.pattern">
+                  Atleast one upper case and digit letter is required, minimum length of password is six characters.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Confirm Password *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="password" class="form-control" required [(ngModel)]="user.confirmPassword" name="confirmPassword" #confirmPassword="ngModel"
+                placeholder="Confirm Password" pattern="^(?=.*?[A-Z])(?=.*?[0-9])([^\n]*).{6,}$">
+              <div [hidden]="confirmPassword.valid || confirmPassword.pristine" class="alert alert-danger">
+                Confirm password is required or do not match
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <p></p>
+    <div class="row">
+      <fieldset>
+        <legend>Secret Questions</legend>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Question 1 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" required [ngModel]="user.secretQuestion1Id" (ngModelChange)="UpdateQuestionList('secretQuestion1Id', $event)"
+                name="secretQuestion1Id" #secretQuestion1Id="ngModel">
+                <option *ngFor="let q of questionList1" [value]="q.id">{{q.name}}</option>
+              </select>
+              <div [hidden]="secretQuestion1Id.valid || secretQuestion1Id.pristine" class="alert alert-danger">
+                Question 1 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Answer 1 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.answer1" name="answer1" #answer1="ngModel" placeholder="Answer to selected secret question 1">
+              <div [hidden]="answer1.valid || answer1.pristine" class="alert alert-danger">
+                Answer 1 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Question 2 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" required [ngModel]="user.secretQuestion2Id" (ngModelChange)="UpdateQuestionList('secretQuestion2Id', $event)"
+                name="secretQuestion2Id" #secretQuestion2Id="ngModel">
+                <option *ngFor="let q of questionList2" [value]="q.id">{{q.name}}</option>
+              </select>
+              <div [hidden]="secretQuestion2Id.valid || secretQuestion2Id.pristine" class="alert alert-danger">
+                Question 2 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Answer 2 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.answer2" name="answer2" #answer2="ngModel" placeholder="Answer to selected secret question 2">
+              <div [hidden]="answer2.valid || answer2.pristine" class="alert alert-danger">
+                Answer 2 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Question 3 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <select class="form-control" required [ngModel]="user.secretQuestion3Id" (ngModelChange)="UpdateQuestionList('secretQuestion3Id', $event)"
+                name="secretQuestion3Id" #secretQuestion3Id="ngModel">
+                <option *ngFor="let q of questionList3" [value]="q.id">{{q.name}}</option>
+              </select>
+              <div [hidden]="secretQuestion3Id.valid || secretQuestion3Id.pristine" class="alert alert-danger">
+                Question 3 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 input-label">
+            Answer 3 *
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="user.answer3" name="answer3" #answer3="ngModel" placeholder="Answer to selected secret question 3">
+              <div [hidden]="answer3.valid || answer3.pristine" class="alert alert-danger">
+                Answer 3 is required!
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <p></p>
+    <div class="row">
+      <fieldset>
+        <legend>Privacy Statement</legend>
+        <div class="row privacy-statement">
+          <div class="col-md-12">
+            {{termsAndConditions}}
+          </div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="normal-text"><input type="checkbox" required [(ngModel)]="user.termsAccepted" name="termsAccepted" #termsAccepted="ngModel" class="custom-check-box"> I have read and accepted the above privacy statement.</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <!--<div class="form-group">
+      <label for="jobTitle">Job title</label>
+      <input type="text" class="form-control" required [(ngModel)]="user.jobTitle" name="jobTitle" #jobTitle="ngModel" placeholder="Job title">
+    </div>-->
+    <!--<div class="form-group">
+      <label for="Organisation">Organisation</label>
+      <select class="form-control" required [(ngModel)]="user.organisationId" name="organisationId" #organisationId="ngModel" aria-placeholder="Organisation">
+        <option *ngFor="let t of organisations" [value]="t.id">{{t.name}}</option>
+      </select>
+      <div [hidden]="organisationId.valid || organisationId.pristine" class="alert alert-danger">
+        Organisation is required!
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" required [(ngModel)]="user.email" name="email" #email="ngModel" placeholder="Email address">
+      <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+        Email is required!
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="telephone">Telephone</label>
+      <input type="text" class="form-control input-small" [(ngModel)]="user.telephone" name="telephone" #telephone="ngModel" placeholder="Telephone">
+    </div>-->
+    <br>
+    <div class="row">
+      <div class="col-md-6 col-sm-6 col-xs-6">
+        <button type="button" class="btn btn-md btn-warning btn-secondary btn-block" (click)="CancelRegistration()">Cancel</button>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-6">
+        <button type="submit" class="btn btn-md btn-success btn-primary btn-block" [disabled]="!registrationForm?.valid || registrationForm?.pending || isProcessing"
+          (handleProcessing)="onHandleProcessing($event)">
+          <span [hidden]="isProcessing">
+            <i class="fa fa-lg fa-save"></i> Create Account
+          </span>
+          <span [hidden]="!isProcessing">
+            <i class="fa fa-spinner fa-spin"></i> Please wait...
+          </span>          
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="container" *ngIf="errorMessage" class="error-message">
+    <span>{{errorMessage}}:</span>
+    <ul *ngIf="errors">
+      <li *ngFor="let e of errors">{{e.message}}</li>
+    </ul>
+  </div>  
+</div>
