@@ -1,0 +1,11 @@
+{
+  "name": "cec-netid",
+  "globalDependencies": {
+    "core-js": "registry:dt/core-js#0.0.0+20160725163759",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "node": "registry:dt/node#6.0.0+20160807145350"
+  },
+  "dependencies": {
+    "sweetalert2": "registry:npm/sweetalert2#1.3.0+20160511144615"
+  }
+}
