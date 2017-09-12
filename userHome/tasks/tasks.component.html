@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel-body">
+                <table class="table table-condensed table-striped table-bordered export" id="taskListTable">
+                    <thead>
+                        <tr>
+                            <th (click)="SortList(1)" class="sort-column-header">Status <i class='{{SortIconClass(1)}}'></i></th>
+                            <th (click)="SortList(2)" class="sort-column-header">Date <i class='{{SortIconClass(2)}}'></i></th>
+                            <th (click)="SortList(3)" class="sort-column-header">From <i class='{{SortIconClass(3)}}'></i></th>
+                            <th (click)="SortList(4)" class="sort-column-header">Organisation <i class='{{SortIconClass(4)}}'></i></th>
+                            <th (click)="SortList(5)" class="sort-column-header">Subject <i class='{{SortIconClass(5)}}'></i></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let t of taskList">
+                            <td>{{t.taskStatusCode}}</td>
+                            <td>{{t.dateRequested | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{t.requestedBy}}</td>
+                            <td>{{t.organisationName}}</td>
+                            <td>{{t.subject}}</td>
+                            <!--<td><a href="/#/accountworkflow/{{t.taskId}}">View</a></td>-->
+                            <td><button type="button" class="btn btn-md btn-success btn-secondary btn-block" (click)="onTaskWorkflowSubmit(t.taskId, t.taskTypeCode)">View</button></td>                            
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination [(ngModel)]="tasksComponent.pagination.currentPage" class="pagination-sm" [totalItems]="tasksComponent.pagination.totalItems"
+                    [maxSize]="tasksComponent.pagination.maxSize" [itemsPerPage]="tasksComponent.pagination.itemsPerPage" (pageChanged)="PageChanged($event)">
+                </pagination>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="container container-single-left">
+    <form (ngSubmit)="onAccountInfoSave()" #displayUserAccountInfoForm="ngForm">
+        <div class="row margin-top-small">
+            <fieldset class="edit-mode">
+                <legend>Account Details</legend>
+                <div class="container" *ngIf="errorMessage" class="error-message">
+                    <span>{{errorMessage}}:</span>
+                    <ul *ngIf="errors">
+                        <li *ngFor="let e of errors">{{e.message}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        NETiD Account Type :
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="userAccountInfo.globalRoleCode" name="globalRoleCode" #globalRoleCode="ngModel">
+                                <option *ngFor="let s of globalRoleList" [value]="s.code">{{s.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Status :
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="userAccountInfo.accountStatusCode" name="accountStatusCode" #accountStatusCode="ngModel" (ngModelChange)="AccountStatusChange($event)">
+                                <option *ngFor="let s of accountStatusList" [value]="s.code">{{s.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" [hidden]="accountStatusCode.value !=='InActive' && userAccountInfo.accountStatusCode !== 'InActive'">
+                    <div class="col-md-4 input-label">
+                        Disable Reason :
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="userAccountInfo.disableReasonCode" name="disableReason" #disableReason="ngModel"  (ngModelChange)="AccountselecteDisableReasonChange($event)">
+                                <option *ngFor="let d of disableReasons" [value]="d.code">{{d.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="userAccountInfo.disableReasonCode ==='Other'">
+                    <div class="col-md-4 input-label">
+                        Comment :
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                             <textarea type="text" class="form-control" placeholder="Disabled Reason" [(ngModel)]="userAccountInfo.disableReasonComment" name="disableReasonComment"
+                                    #disableReasonComment="ngModel">
+                                </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+                        <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!disabledReasonValid || !displayUserAccountInfoForm?.valid || displayUserAccountInfoForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">
+                            <span [hidden]="isProcessing">
+                                 <i class="fa fa-lg fa-save"></i> Save
+                            </span>
+                            <span [hidden]="!isProcessing">
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                        </button>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+                        <button type="button" class="btn btn-md btn-warning btn-secondary btn-block" (click)="onAccountEditCancel()">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>

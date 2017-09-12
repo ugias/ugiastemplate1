@@ -1,0 +1,138 @@
+<div class="container">
+
+	<div class="row">
+			<form (ngSubmit)="onSubmit()" #searchForm="ngForm">
+		<fieldset>
+			<legend>Search</legend>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-2 input-label">
+						Organisation
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select class="form-control" required [(ngModel)]="searchComponent.organisationId" name="selectedOrganisation" #selectedOrganisation="ngModel">
+								<option *ngFor="let o of organisations" [value]="o.extOrganisationId">{{o.name}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-1 input-label">
+						User Name
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<input type="text" class="form-control" name="userName" aria-placeholder="search by user name" [(ngModel)]="searchComponent.keyword">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<button type="button"  (click)="onSubmit()"  class="btn btn-md btn-success btn-primary btn-block" [disabled]="isProcessing"
+											(handleProcessing)="onHandleProcessing($event)">
+									<span [hidden]="isProcessing">
+           							<i class="fa fa-lg fa-sign-in"></i> Search</span>
+          							<span [hidden]="!isProcessing"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
+        						</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 input-label">
+					Organisation Role
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<select class="form-control" [(ngModel)]="searchComponent.roleCode" name="selectedRole" #selectedRole="ngModel">
+								<option *ngFor="let o of roles" [value]="o.code">{{o.name}}</option>
+							</select>
+					</div>
+				</div>
+				<div class="col-md-1 input-label">
+					Acc Status
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<select class="form-control" [(ngModel)]="searchComponent.statusCode" name="selectedAccountStatus" #selectedAccountStatus="ngModel">
+								<option *ngFor="let o of accountStatuses" [value]="o.code">{{o.name}}</option>
+							</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+						<div class="form-group">
+						<button type="button" (click)="Reset()" class="btn btn-md btn-warning btn-primary btn-block" [disabled]="isProcessing" (handleProcessing)="onHandleProcessing($event)">
+						<span [hidden]="isProcessing"><i class="fa fa-lg fa-times"></i> Reset</span>
+          				<span [hidden]="!isProcessing"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
+        				</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-2 input-label" *ngIf="isRoleFilter">
+					Account Role
+				</div>
+				<div class="col-md-4"  *ngIf="isRoleFilter">
+					<div class="form-group">
+						<select class="form-control" [(ngModel)]="searchComponent.accountCode" name="selectedAccountCode" #selectedAccountCode="ngModel">
+								<option *ngFor="let o of globalRoles" [value]="o.code">{{o.name}}</option>
+							</select>
+					</div>
+				</div>
+				<div class="col-md-1 input-label">
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						
+					</div>
+				</div>
+				<div class="col-md-2">
+				
+				</div>
+			</div>
+		</fieldset>
+		</form>
+		<fieldset>
+			<legend>Search Results</legend>
+			<div class="panel-body">
+				<table class="table table-condensed table-striped table-bordered export" id="accountsListTable">
+					<thead>
+						<tr>
+							<th (click)="SortList(4)" class="sort-column-header">Account Role<i class='{{SortIconClass(4)}}'></i></th>
+							<th (click)="SortList(1)" class="sort-column-header">First Name <i class='{{SortIconClass(1)}}'></i></th>
+							<th (click)="SortList(2)" class="sort-column-header">Last Name <i class='{{SortIconClass(2)}}'></i></th>
+							<th (click)="SortList(3)" class="sort-column-header">Diocese <i class='{{SortIconClass(3)}}'></i></th>
+							<th (click)="SortList(5)" class="sort-column-header">Organisation<i class='{{SortIconClass(5)}}'></i></th>
+							<th (click)="SortList(6)" class="sort-column-header">Position <i class='{{SortIconClass(6)}}'></i></th>
+							<th (click)="SortList(7)" class="sort-column-header">From Date <i class='{{SortIconClass(7)}}'></i></th>
+							<th (click)="SortList(8)" class="sort-column-header">To Date <i class='{{SortIconClass(8)}}'></i></th>
+							<th (click)="SortList(9)" class="sort-column-header">Status<i class='{{SortIconClass(9)}}'></i></th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let t of accountList">
+							<td>{{t.globalRoleCode}}</td>
+							<td>{{t.firstname}}</td>
+							<td>{{t.lastname}}</td>
+							<td>{{t.dioceseName}}</td>
+							<td>{{t.organisationName}}</td>
+							<td>{{t.positionCode}}</td>
+							<td>{{t.fromDate | date: 'dd/MM/yyyy'}}</td>
+							<td>{{t.toDate | date: 'dd/MM/yyyy'}}</td>
+							<td>{{t.organisationStatusCode}}</td>
+							<td>
+								<a href="#/userDetails/{{t.accountId}}/{{t.userId}}"><span *ngIf="isDioceseUser">View</span><span *ngIf="!isDioceseUser">Edit</span></a>
+								<a href="#"><span *ngIf="!isDioceseUser && t.organisationStatusCode === 'Active'" (click)="DeLink(t.accountOrganisationId, t.firstname + ' ' + t.lastname, t.organisationName)">Delink</span></a>
+							</td>							
+						</tr>
+					</tbody>
+				</table>
+				<pagination *ngIf="accountsComponent.pagination.totalItems !== 0" [(ngModel)]="accountsComponent.pagination.currentPage"
+								class="pagination-sm" [totalItems]="accountsComponent.pagination.totalItems" [maxSize]="accountsComponent.pagination.maxSize"
+								[itemsPerPage]="accountsComponent.pagination.itemsPerPage" (pageChanged)="PageChanged($event)">
+				</pagination>
+			</div>
+		</fieldset>
+	</div>
+	
+</div>

@@ -1,0 +1,147 @@
+<div class="container">
+    <div class="row">
+        <fieldset>
+            <legend><span class="bold-orange-text">{{application.name}}</span></legend>
+            <div class="panel-body">
+                <form (ngSubmit)="onSubmit()" #appAccessForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-1 input-label">
+                            Name
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" required class="form-control" placeholder="Name" [(ngModel)]="application.name" name="appName" #appName="ngModel">
+                                <div [hidden]="appName.valid || appName.pristine || errorMessage !==''" class="alert alert-danger">
+                                    Name is required and must be unique!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 input-label">
+                            Description
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" required class="form-control" placeholder="Description" [(ngModel)]="application.description" name="appDescription"
+                                    #appDescription="ngModel">
+                                <div [hidden]="appDescription.valid || appDescription.pristine" class="alert alert-danger">
+                                    Description is required!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 input-label">
+                            URL
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" required class="form-control" placeholder="Url" [(ngModel)]="application.url" name="appUrl" #appUrl="ngModel">
+                                <div [hidden]="appUrl.valid || appUrl.pristine" class="alert alert-danger">
+                                    URL is required!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 input-label">
+                            Status
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select required class="form-control" [(ngModel)]="application.applicationStatusCode" name="selectedStatus" #selectedStatus="ngModel">
+								    <option *ngFor="let s of applicationStatuses | async" [value]="s.code">{{s.name}}</option>
+							    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 input-label">
+                            Notification
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <textarea type="text" class="form-control" placeholder="Notification" [(ngModel)]="application.notification" name="appNotification"
+                                    #appNotification="ngModel">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 input-label">
+                            Allow Request
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="checkbox" [(ngModel)]="application.isAccessible" name="isAccessible"
+                                    #isAccessible="ngModel" class="custom-check-box">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <button type="button" class="btn btn-md btn-info btn-secondary pull-right" (click)="onSecurityRoleAddClick()" [disabled]="formInvalid"><i class="fa fa-lg fa-plus"></i> Add Security Role</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="panel-body">
+                                <table class="table table-condensed table-striped table-bordered export" id="applicationClaimsTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-2">Security role</th>
+                                            <th>Description</th>
+                                            <th class="col-md-3">Status</th>
+                                            <th class="col-md-1">Default</th>
+                                            <th class="col-md-1">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let c of application.claims; let i = index">
+                                            <td>
+                                                <input type="text" (blur)="onBlur($event.target.value)" required class="form-control" placeholder="Name" [(ngModel)]="c.name"
+                                                    name="appClaimName_{{i}}" #appClaimName="ngModel">
+                                                <div [hidden]="appClaimName.valid || appClaimName.pristine" class="alert alert-danger">
+                                                    Name is required!
+                                                </div>
+                                            </td>
+                                            <td> <textarea type="text" class="form-control" placeholder="Description" [(ngModel)]="c.description"
+                                                    name="appClaimDesc_{{i}}" #appClaimDesc="ngModel"></textarea>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <select required class="form-control" [(ngModel)]="c.statusCode" name="selectedClaimStatus_{{i}}" #selectedClaimStatus="ngModel">
+                                                        <option *ngFor="let s of applicationClaimStatuses | async" [value]="s.code">{{s.name}}</option>
+                                                        </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" [(ngModel)]="c.isDefault" name="isDefault_{{i}}" #isDefualt="ngModel" class="custom-check-box" (change)='onIsDefualtChange(i)'>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-md btn-danger btn-secondary" [disabled]="c.applicationClaimId !== '00000000-0000-0000-0000-000000000000'"
+                                                    (click)="onSecurityRoleRemoveClick(c)"><i class="fa fa-lg fa-remove"  ></i> Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="saveApplicationBlock">
+                        <div class="col-md-1 input-label">
+                        </div>
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-md btn-success pull-right" [disabled]="!appAccessForm?.valid || appAccessForm?.pending || isProcessing || formInvalid"
+                                (handleProcessing)="onHandleProcessing($event)">
+                            <span [hidden]="isProcessing">
+                                <i class="fa fa-lg fa-save"></i> <span *ngIf="!application.id"> Add</span><span *ngIf="application.id">Update</span>
+                            </span>
+                            <span [hidden]="!isProcessing">
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>

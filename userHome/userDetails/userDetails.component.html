@@ -1,0 +1,27 @@
+<tabset id="userDetailsContainerTabset">
+    <!-- Personal details -->
+    <tab [active]="activeTabId === 0" (select)="setCurrentTab(0)" [customClass]="">
+        <template tabHeading>
+            <i class="fa fa-briefcase"></i> Personal Details
+        </template>
+        <div class="container" *ngIf="activeTabId === 0">
+            <!-- Account details -->
+            <account-info [userDetails]="userDetails"></account-info>
+            <!-- Contact details -->
+            <contact-info [userDetails]="userDetails"></contact-info>
+            <!-- Login details -->
+            <login-info [userDetails]="userDetails"></login-info>
+            <!-- Secret questions -->
+            <secret-question-info [userDetails]="userDetails" *ngIf="canSeeSecretQuestions"></secret-question-info>
+        </div>
+    </tab>
+    <!-- Organisational details -->
+    <tab [active]="activeTabId === 1" (select)="setCurrentTab(1)" [customClass]="">
+        <template tabHeading>
+            <i class="fa fa-building"></i> Organisational Details
+        </template>
+        <div class="container" *ngIf="activeTabId === 1">
+            <organisation-info [userOrganisations]="userDetails.organisations" [accountIdToUse]="userDetails.accountId"></organisation-info>
+        </div>
+    </tab>
+</tabset>

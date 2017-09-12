@@ -1,0 +1,35 @@
+<div class="container container-single-left">
+  <form (ngSubmit)="onLoginEditSubmit()" #displayUserLoginInfoForm="ngForm">
+    <div class="row">
+      <fieldset>
+        <legend>Login Details</legend>
+        <div class="row">
+          <div class="col-md-4 input-label-display">
+            Login Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userDetails.userId}}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label-display">
+            Password :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              **********
+              <!--<input type="text" class="form-control" required [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel" placeholder="Given Name" (blur)="onInputBlur($event.target.value)">-->
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasEditPermission" class="row">
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="submit" class="btn btn-md btn-success btn-secondary btn-block">Edit</button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>

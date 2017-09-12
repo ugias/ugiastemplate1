@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 div-margin-top">
+            <label class="normal-text"><input type="checkbox" required [ngModel]="showReadMessages" class="custom-check-box" (ngModelChange)="RefreshMessageList($event)"> Show read messages</label>
+        </div>
+        <div class="col-md-12">
+            <div class="panel-body">
+                <table class="table table-condensed table-striped table-bordered export" id="messageListTable">
+                    <thead>
+                        <tr>
+                            <th (click)="SortList(1)" class="sort-column-header">Status <i class='{{SortIconClass(1)}}'></i></th>
+                            <th (click)="SortList(2)" class="sort-column-header">Date <i class='{{SortIconClass(2)}}'></i></th>
+                            <th (click)="SortList(3)" class="sort-column-header">Application <i class='{{SortIconClass(3)}}'></i></th>
+                            <th (click)="SortList(4)" class="sort-column-header">From <i class='{{SortIconClass(4)}}'></i></th>
+                            <th (click)="SortList(5)" class="sort-column-header">To Role <i class='{{SortIconClass(5)}}'></i></th>
+                            <th (click)="SortList(5)" class="sort-column-header">To User <i class='{{SortIconClass(6)}}'></i></th>                            
+                            <th (click)="SortList(6)" class="sort-column-header">Subject <i class='{{SortIconClass(7)}}'></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let t of messageList">
+                            <td>{{t.messageStatusCode}}</td>
+                            <td>{{t.dateSent | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{t.applicationName}}</td>
+                            <td>{{t.messageFrom}}</td>
+                            <td>{{t.toRoleCode}}</td>
+                            <td>{{t.toUserId}}</td>                            
+                            <td>{{t.subject}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination [(ngModel)]="messagesComponent.pagination.currentPage" class="pagination-sm" [totalItems]="messagesComponent.pagination.totalItems"
+                    [maxSize]="messagesComponent.pagination.maxSize" [itemsPerPage]="messagesComponent.pagination.itemsPerPage"
+                    (pageChanged)="PageChanged($event)">
+                </pagination>
+            </div>
+        </div>
+    </div>
+</div>

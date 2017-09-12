@@ -1,0 +1,38 @@
+<div class="row" id="addNewOrganisationBlock">
+  <div class="col-md-2 col-sm-3 col-xs-4 float-right">
+    <button type="button" class="btn btn-md btn-info btn-secondary btn-block pull-right" (click)="onOrganisationAddSubmit()"><i class="fa fa-lg fa-plus"></i> Add Organisation</button>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="panel-body">
+    <table class="table table-condensed table-striped table-bordered export" id="userDetailsOrgListTable">
+      <thead>
+        <tr>
+          <th>Organisation</th>
+          <th>Position</th>
+          <th>Email</th>
+          <th>Access Commences</th>
+          <th>Access Terminates</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of userOrganisations">
+          <td>{{o.name}} {{o.externalId}} </td>
+          <td>{{o.jobTitle}}</td>
+          <td>{{o.email}}</td>
+          <td>{{o.fromDate | date: 'dd/MM/yyyy'}}</td>
+          <td>{{o.toDate | date: 'dd/MM/yyyy'}}</td>
+          <td>{{o.statusCode}}</td>
+          <td><button type="button" class="btn btn-md btn-success btn-secondary btn-block" 
+          (click)="onOrganisationEditSubmit(o.accountOrganisationId)" 
+          [disabled]="!hasEditPermission || !(impExternalOrganisationId === '' || impExternalOrganisationId === o.extOrganisationId || o.extOrganisationId === currentUserExtOrganId )">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

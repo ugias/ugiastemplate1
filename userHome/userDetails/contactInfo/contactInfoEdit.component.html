@@ -1,0 +1,134 @@
+<div class="container container-single-left">
+  <form (ngSubmit)="onContactInfoSave()" #displayUserContactInfoForm="ngForm">
+    <div class="row">
+      <fieldset class="edit-mode">
+        <legend>Contact Details</legend>
+        <div class="container" *ngIf="errorMessage" class="error-message">
+          <span>{{errorMessage}}:</span>
+          <ul *ngIf="errors">
+            <li *ngFor="let e of errors">{{e.message}}</li>
+          </ul>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Salutation :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <select class="form-control input-small" required [(ngModel)]="userContactInfo.salutationCode" name="salutation" #salutation="ngModel">
+                <option *ngFor="let s of salutationList" [value]="s.code">{{s.name}}</option>                
+              </select>
+              <div [hidden]="salutation.valid || salutation.pristine" class="alert alert-danger">
+                Salutation is required!
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Given Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="userContactInfo.firstName" name="firstName" #firstName="ngModel"
+                placeholder="Given Name">
+              <div [hidden]="firstName.valid || firstName.pristine" class="alert alert-danger">
+                Given Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Middle Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="userContactInfo.middleName" name="middleName" #middleName="ngModel"
+                placeholder="Middle Name">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Last Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="userContactInfo.lastName" name="lastName" #lastName="ngModel"
+                placeholder="Last Name">
+              <div [hidden]="lastName.valid || lastName.pristine" class="alert alert-danger">
+                Last Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Prefered Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="userContactInfo.displayName" name="displayName" #displayName="ngModel"
+                placeholder="Prefered Name">
+              <div [hidden]="displayName.valid || displayName.pristine" class="alert alert-danger">
+                Prefered Name is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            DOB :
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <div class="input-group input-small cec-datepicker">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dob1" [ngModel]="ngbDateOfBirth" (ngModelChange)="onDateOfBirthChange($event)"
+                  ngbDatepicker #dob1="ngbDatepicker" required readonly>
+                <div class="input-group-addon" (click)="dob1.toggle()">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
+              <!--<input type="date" class="form-control input-small" required [(ngModel)]="userContactInfo.dateOfBirth" name="dateOfBirth"
+                #dateOfBirth="ngModel">-->
+              <!--<div [hidden]="dob1.valid || dob1.pristine" class="alert alert-danger">
+                Date of birth is required
+              </div>-->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Mobile :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="text" class="form-control" required [(ngModel)]="userContactInfo.mobile" name="mobile" #mobile="ngModel" placeholder="Mobile">
+              <div [hidden]="mobile.valid || mobile.pristine" class="alert alert-danger">
+                Mobile is required!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!displayUserContactInfoForm?.valid || displayUserContactInfoForm?.pending || isProcessing"
+              (handleProcessing)="onHandleProcessing($event)">
+          <span [hidden]="isProcessing">
+            <i class="fa fa-lg fa-save"></i> Save
+          </span>
+          <span [hidden]="!isProcessing">
+            <i class="fa fa-spinner fa-spin"></i> Please wait...
+          </span>          
+        </button>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="button" class="btn btn-md btn-warning btn-secondary btn-block" (click)="onContactEditCancel()">Cancel</button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>

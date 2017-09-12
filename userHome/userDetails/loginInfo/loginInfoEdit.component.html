@@ -1,0 +1,72 @@
+<div class="container container-single-left">
+  <form (ngSubmit)="onLoginInfoSave()" #displayUserLoginInfoForm="ngForm">
+    <div class="row">
+      <fieldset class="edit-mode">
+        <legend>Login Details</legend>
+        <div class="container" *ngIf="errorMessage" class="error-message">
+          <span>{{errorMessage}}:</span>
+          <ul *ngIf="errors">
+            <li *ngFor="let e of errors">{{e.message}}</li>
+          </ul>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label-display">
+            Login Name :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userLoginInfo.userName}}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            New Password :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="password" class="form-control" required [(ngModel)]="userLoginInfo.password" name="password" #password="ngModel"
+                placeholder="Password" pattern="^(?=.*?[A-Z])(?=.*?[0-9])([^\n]*).{6,}$">
+              <div *ngIf="password.errors && password.errors.required" >
+									password is required!
+								</div>
+								<div *ngIf="password.errors && password.errors.pattern">
+								    Password must be a minimum of six characters and contain at least one uppercase letter and one digit or special character.
+								</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label">
+            Confirm Password :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <input type="password" class="form-control" required [(ngModel)]="userLoginInfo.confirmPassword" name="confirmPassword" #confirmPassword="ngModel"
+                placeholder="Confirm Password" >
+              <div [hidden]="confirmPassword.valid || confirmPassword.pristine" class="alert alert-danger">
+                Confirm password is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!displayUserLoginInfoForm?.valid || displayUserLoginInfoForm?.pending || isProcessing"
+              (handleProcessing)="onHandleProcessing($event)">
+              <span [hidden]="isProcessing">
+                <i class="fa fa-lg fa-save"></i> Save
+              </span>
+              <span [hidden]="!isProcessing">
+                <i class="fa fa-spinner fa-spin"></i> Please wait...
+            </span>          
+           </button>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="button" class="btn btn-md btn-warning btn-secondary btn-block" (click)="onLoginEditCancel()">Cancel</button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>

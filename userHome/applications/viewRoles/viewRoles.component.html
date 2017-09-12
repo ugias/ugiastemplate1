@@ -1,0 +1,72 @@
+<div class="container">
+    <form #viewUserRoleForm="ngForm" (ngSubmit)="onAssignUserRolesSubmit()">
+        <div class="row margin-top-small">
+            <fieldset class="edit-mode">
+                <legend>User Roles at {{organisationName}}</legend>
+                <div class="container" *ngIf="messageHeader" class="error-message">
+                    <span>{{messageHeader}}:</span>
+                    <ul *ngIf="errors">
+                        <li *ngFor="let e of errors">{{e.message}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 input-label">
+                        Application *
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <select class="form-control" required [ngModel]="applicationIdToProcess" (ngModelChange)="onApplicationChange($event)"
+                                name="applicationId" #extOrganisationId="ngModel" aria-placeholder="Application">
+                              <option *ngFor="let a of applications" [value]="a.applicationId">{{a.applicationName}}</option>
+                           </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <table class="table table-condensed table-striped table-bordered export" id="assignUserRolesTable">
+                                <thead>
+                                    <tr>
+                                        <th (click)="SortList(1)" class="sort-column-header">Name <i class='{{SortIconClass(1)}}'></i></th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let a of accountApplicationClaims">
+                                        <td>{{a.userId}}</td>
+                                        <td>
+                                            <span class="assign-user-role" *ngFor="let ac of a.applicationClaims; let i=index">
+                                                <label class="normal-text"><input type="checkbox" [(ngModel)]="ac.isSelected" [ngModelOptions]="{standalone: true}" 
+                                                class="custom-check-box"> {{ ac.name }}</label>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <pagination [(ngModel)]="assigningUserRolesComponent.pagination.currentPage" class="pagination-sm" [totalItems]="assigningUserRolesComponent.pagination.totalItems"
+                                [maxSize]="assigningUserRolesComponent.pagination.maxSize" [itemsPerPage]="assigningUserRolesComponent.pagination.itemsPerPage"
+                                (pageChanged)="onPageChanged($event)" name="paginationComponent">
+                            </pagination>
+                        </div>
+                    </div>
+                </div>
+                  <div class="row">
+                    <div class="col-md-4 col-sm-6 col-xs-6 float-right margin-top-small">
+                        <!--<button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!assignUserRoleForm?.valid || assignUserRoleForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">-->
+                        <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!viewUserRoleForm?.valid || viewUserRoleForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">
+                            <span [hidden]="isProcessing">
+                                 <i class="fa fa-lg fa-save"></i> Submit
+                            </span>
+                            <span [hidden]="!isProcessing">
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>

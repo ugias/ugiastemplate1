@@ -1,0 +1,58 @@
+<div class="container">
+    <form (ngSubmit)="onAssignGroupRoleSave()" #assignGroupRoleForm="ngForm">
+        <div class="row margin-top-small">
+            <fieldset class="edit-mode">
+                <legend>Manage Bulk Group Roles</legend>
+                <div class="container" *ngIf="errorMessage" class="error-message">
+                    <span>{{errorMessage}}:</span>
+                    <ul *ngIf="errors">
+                        <li *ngFor="let e of errors">{{e.message}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 input-label">
+                        Role Name
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="roleApplicationClaim.applicationClaimId" required name="applicationClaimId" #applicationClaimId="ngModel">
+                                <option *ngFor="let s of applicationClaimListObservable | async" [value]="s.applicationClaimId">{{s.name}}</option>
+                            </select>
+                        </div>
+                            <div [hidden]="applicationClaimId.valid || applicationClaimId.pristine" class="alert alert-danger">
+                                Role name is required!
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 input-label">
+                        Assign
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="roleApplicationClaim.roleCode" required name="organisationRoleCode" #organisationRoleCode="ngModel">
+                                <option *ngFor="let s of organisationRoleList" [value]="s.code">{{s.name}}</option>
+                            </select>
+                            <div [hidden]="organisationRoleCode.valid || organisationRoleCode.pristine" class="alert alert-danger">
+                                Assign is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+                        <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!assignGroupRoleForm?.valid || assignGroupRoleForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">
+                            <span [hidden]="isProcessing">
+                                 <i class="fa fa-lg fa-save"></i> Submit
+                            </span>
+                            <span [hidden]="!isProcessing">
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,168 @@
+<div class="container container-single-left">
+    <form (ngSubmit)="onOrganisationInfoSave()" #displayUserOrganisationInfoForm="ngForm" >
+        <div class="row">
+            <fieldset class="edit-mode">
+                <legend>{{organisationLegendTitle}}</legend>
+                <div class="container" *ngIf="errorMessage" class="error-message">
+                    <span>{{errorMessage}}:</span>
+                    <ul *ngIf="errors">
+                        <li *ngFor="let e of errors">{{e.message}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Diocese *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" required [ngModel]="organisationModel.dioceseId" (ngModelChange)="onDioceseIdChange($event)"
+                                name="dioceseId" #dioceseId="ngModel" aria-placeholder="Diocese" [disabled]="isEditMode">
+                                <option *ngFor="let d of dioceseList" [value]="d.dioceseId">{{d.dioceseName}}</option>
+                            </select>
+                            <div [hidden]="dioceseId.valid || dioceseId.pristine" class="alert alert-danger">
+                                Diocese is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Organisation *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" required [(ngModel)]="organisationModel.extOrganisationId" name="extOrganisationId" #extOrganisationId="ngModel"
+                                aria-placeholder="Organisation" [disabled]="isEditMode">
+                              <option *ngFor="let o of organisationListObservable | async" [value]="o.publicId">{{o.externalId}} {{o.name}} {{o.locationSuburb}}</option>
+                           </select>
+                            <div [hidden]="extOrganisationId.valid || extOrganisationId.pristine" class="alert alert-danger">
+                                Organisation is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Position *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" required [ngModel]="organisationModel.jobTitle" (ngModelChange)="onJobTitleChange($event)" name="jobTitle"
+                                #jobTitle="ngModel">
+                                <option *ngFor="let d of jobTitleList" [value]="d.name">{{d.name}}</option>
+                            </select>
+                            <div [hidden]="jobTitle.value !== 'Other'" class="custom-warning-alert">
+                                (please complete "Other Position" in row below)
+                            </div>
+                            <div [hidden]="jobTitle.valid || jobTitle.pristine" class="alert alert-danger">
+                                Position is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Other Position <span *ngIf="jobTitle.value === 'Other'">*</span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <input type="text" class="form-control" required [(ngModel)]="organisationModel.otherJobTitle" name="otherJobTitle" #otherJobTitle="ngModel"
+                                [disabled]="jobTitle.value !== 'Other'">
+                            <div [hidden]="otherJobTitle.valid || otherJobTitle.pristine || jobTitle.value !== 'Other'" class="alert alert-danger">
+                                Other Position is required!
+                            </div>                                
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        NETiD Position Type *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" required [(ngModel)]="organisationModel.roleCode" name="roleCode" #roleCode="ngModel" [disabled]="!hasControlEditPermission || !canSelectNetIdPositionType">
+                                <option *ngFor="let d of roleList" [value]="d.code">{{d.name}}</option>
+                            </select>
+                            <div [hidden]="roleCode.valid || roleCode.pristine" class="alert alert-danger">
+                                NETiD Position Type is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        Email *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <input type="text" class="form-control" required [(ngModel)]="organisationModel.email" name="email" #email="ngModel"
+                                placeholder="Organisational email address">
+                            <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                                Valid e-mail address is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" [hidden]="!isEditMode">
+                    <div class="col-md-4 input-label">
+                        Status *
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <select class="form-control" [(ngModel)]="organisationModel.statusCode" name="statusCode" #statusCode="ngModel" [disabled]="!hasControlEditPermission || disableEditStatus">
+                                <option *ngFor="let d of statusCodeList" [value]="d.code">{{d.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        From Date *
+                    </div>
+                    <div class="col-md-5 col-sm-5 col-xs-12">
+                        <div class="form-group">
+                            <div class="input-group input-small cec-datepicker">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="fromDate" [ngModel]="ngbFromDate" (ngModelChange)="onFromDateChange($event)"
+                                    ngbDatepicker #fromDate="ngbDatepicker" required readonly>
+                                <div class="input-group-addon cursor-pointer" (click)="fromDate.toggle()">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 input-label">
+                        To Date
+                    </div>
+                    <div class="col-md-5 col-sm-5 col-xs-12">
+                        <div class="form-group">
+                            <div class="input-group input-small cec-datepicker">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="toDate" [ngModel]="ngbToDate" (ngModelChange)="onToDateChange($event)"
+                                    ngbDatepicker #toDate="ngbDatepicker" readonly>
+                                <div class="input-group-addon cursor-pointer" (click)="toDate.toggle()" >
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6 float-right">
+                          <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!displayUserOrganisationInfoForm?.valid || displayUserOrganisationInfoForm?.pending || isProcessing">
+                            <span [hidden]="isProcessing">
+                                 <i class="fa fa-lg fa-save"></i> Save
+                            </span>
+                            <span [hidden]="!isProcessing" >
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                        </button>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 float-right">
+                        <button type="button" class="btn btn-md btn-warning btn-secondary btn-block" (click)="onOrganisationEditCancel()">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>

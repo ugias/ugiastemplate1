@@ -1,0 +1,90 @@
+<div class="container">
+    <form (ngSubmit)="onAssignUserRolesSubmit()" #assignUserRoleForm="ngForm">
+        <div class="row margin-top-small">
+            <fieldset class="edit-mode">
+                <legend>Manage Bulk User Roles</legend>
+                <div class="container" *ngIf="messageHeader" class="error-message">
+                    <span>{{messageHeader}}:</span>
+                    <ul *ngIf="errors">
+                        <li *ngFor="let e of errors">{{e.message}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 input-label">
+                        Diocese *
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <select class="form-control" required [ngModel]="dioceseIdToProcess" (ngModelChange)="onDioceseIdChange($event)" name="dioceseId"
+                                #dioceseId="ngModel">
+                                <option *ngFor="let d of dioceseListObservable | async" [value]="d.dioceseId">{{d.dioceseName}}</option>
+                            </select>
+                            <div [hidden]="dioceseId.valid || dioceseId.pristine" class="alert alert-danger">
+                                Diocese is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 input-label">
+                        Organisation *
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <select class="form-control" required [ngModel]="extOrganisationIdToProcess" (ngModelChange)="onOrganisationChange($event)"
+                                name="extOrganisationId" #extOrganisationId="ngModel" aria-placeholder="Organisation">
+                              <option *ngFor="let o of organisationList" [value]="o.publicId">{{o.externalId}} {{o.name}} {{o.locationSuburb}}</option>
+                           </select>
+                            <div [hidden]="extOrganisationId.valid || extOrganisationId.pristine" class="alert alert-danger">
+                                Organisation is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="extOrganisationId.value !== '' && extOrganisationId.valid">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <table class="table table-condensed table-striped table-bordered export" id="assignUserRolesTable">
+                                <thead>
+                                    <tr>
+                                        <th (click)="SortList(1)" class="sort-column-header">Name <i class='{{SortIconClass(1)}}'></i></th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let a of accountApplicationClaims">
+                                        <td>{{a.userId}}</td>
+                                        <td>
+                                            <span class="assign-user-role" *ngFor="let ac of a.applicationClaims; let i=index">
+                                                <label class="normal-text"><input type="checkbox" [(ngModel)]="ac.isSelected" [ngModelOptions]="{standalone: true}" class="custom-check-box"> {{ ac.name }}</label>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <pagination [(ngModel)]="assigningUserRolesComponent.pagination.currentPage" class="pagination-sm" [totalItems]="assigningUserRolesComponent.pagination.totalItems"
+                                [maxSize]="assigningUserRolesComponent.pagination.maxSize" [itemsPerPage]="assigningUserRolesComponent.pagination.itemsPerPage"
+                                (pageChanged)="onPageChanged($event)" name="paginationComponent">
+                            </pagination>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-xs-6 float-right margin-top-small">
+                        <!--<button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!assignUserRoleForm?.valid || assignUserRoleForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">-->
+                        <button type="submit" class="btn btn-md btn-success btn-secondary btn-block" [disabled]="!assignUserRoleForm?.valid || assignUserRoleForm?.pending || isProcessing"
+                            (handleProcessing)="onHandleProcessing($event)">
+                            <span [hidden]="isProcessing">
+                                 <i class="fa fa-lg fa-save"></i> Submit
+                            </span>
+                            <span [hidden]="!isProcessing">
+                                <i class="fa fa-spinner fa-spin"></i> Please wait...
+                            </span>          
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>

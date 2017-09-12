@@ -1,0 +1,33 @@
+<tabset id="applicationContainerTabset">
+    <!-- Personal details -->
+    <tab [active]="activeTabId === 0" (select)="setCurrentTab(0)" [customClass]="">
+        <template tabHeading>
+            <i class="fa fa-plus"></i> Access<span *ngIf="activeTabId===0"> {{totalCount}} </span>
+        </template>
+        <div class="container" *ngIf="activeTabId === 0">
+            <appInfo-component [applications]="appInfo" (refreshApps)="onRefreshAppInfo($event)" (reloadMyhome)="onReloadMyhome($event)"
+                [organisations]="appInfoOrganisations" (refreshOrgans)="onRefreshAppInfoOrganisations($event)" (redirect)="onRedirect($event)">
+            </appInfo-component>
+        </div>
+    </tab>
+    <tab [active]="activeTabId === 1" (select)="setCurrentTab(1)" [customClass]="">
+        <template tabHeading>
+            <i class="fa fa-flag"></i> Notifications <span *ngIf="activeTabId===1"> {{totalCount}} </span>
+        </template>
+        <div class="container" *ngIf="activeTabId === 1">
+            <warningInfo-component [applications]="appWarningInfo" (refresh)="onRefreshWarningInfo($event)">
+            </warningInfo-component>
+        </div>
+    </tab>
+    <!-- Individual role assignment -->
+    <tab *ngIf="isAdministrator"  [active]="activeTabId === 2" (select)="setCurrentTab(2)" [customClass]="">
+        <template tabHeading>
+            <i class="fa fa-graduation-cap"></i> Provision
+        </template>
+        <div class="container" *ngIf="activeTabId === 2">
+            <view-user-roles [isAdministrator]=isAdministrator [applications]="appInfo" [applicationClaimListObservable]="applicationClaimListObservable" [accountOrganisationId]="accountOrganisationId"></view-user-roles>
+        </div>
+    </tab>
+
+
+</tabset>

@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="container" *ngIf="errorMessage" class="error-message">
+        <span>{{errorMessage}}:</span>
+        <ul *ngIf="errors">
+            <li *ngFor="let e of errors">{{e.message}}</li>
+        </ul>
+    </div>
+    <tabset id="userHomeContainerTabset">
+        <!-- Applications -->
+        <tab [active]="activeTabId === 0" (select)="setCurrentTab(0)" [customClass]="">
+            <template tabHeading>
+                <i class="fa fa-tasks"></i> Applications
+            </template>
+            <div class="container" *ngIf="activeTabId === 0">
+                <applications-component (reloadMyhome)="onReloadMyhome($event)"></applications-component>
+            </div>
+        </tab>
+        <!-- Tasks -->
+        <tab [active]="activeTabId === 1" (select)="setCurrentTab(1)" [customClass]="">
+            <template tabHeading>
+                <i class="fa fa-bell"></i> Tasks <span *ngIf="activeTabId===1"> {{totalCount}} </span>
+            </template>
+            <div class="container" *ngIf="activeTabId === 1">
+                <tasks-component [taskList]="activeTasksList" (refreshList)="onRefreshTaskList($event)"></tasks-component>
+            </div>
+        </tab>
+        <!-- Messages -->
+        <tab *ngIf="hasMessageViewPermission" [active]="activeTabId === 2" (select)="setCurrentTab(2)" [customClass]="">
+            <template tabHeading>
+                <i class="fa fa-comments"></i> Messages <span *ngIf="activeTabId===2"> {{totalCount}} </span>
+            </template>
+            <div class="container" *ngIf="activeTabId === 2">
+                <messages-component [messageList]="activeMessageList" (refreshList)="onRefreshMessageList($event)"></messages-component>
+            </div>
+        </tab>
+        <!-- My details -->
+        <tab [active]="activeTabId === 3" (select)="setCurrentTab(3)" [customClass]="">
+              <template tabHeading>
+                <i class="fa fa-book"></i> My Details
+            </template>
+            <div class="container user-details-container" *ngIf="activeTabId === 3">
+                <div class="container-single-left user-impersonation" *ngIf="impersonatingUser !== ''">
+                    <div class="row margin-bottom-small">
+                        <fieldset>
+                            <legend>You are impersonating "{{impersonatingUser}}"</legend>
+                            <button type="button" class="btn btn-sm btn-warning btn-secondary" (click)="onCancelImpersonation()">Cancel Impersonation</button>
+                        </fieldset>
+                    </div>
+                </div>
+                <userDetails-component [userDetails]="activeUserDetails" (refreshUserDetails)="onRefreshUserDetails($event)"></userDetails-component>
+            </div>
+        </tab>
+        <!-- Users -->
+        <tab *ngIf="isOrganisationAdmin" [active]="activeTabId === 4" (select)="setCurrentTab(4)" [customClass]="" >
+            <template tabHeading>
+                <i class="fa fa-users fa-users"></i> Users <span *ngIf="activeTabId===4"> {{totalCount}} </span>
+            </template>
+            <div class="container" *ngIf="activeTabId === 4">
+                <accounts-component [accountList]="activeAccountList" (refreshList)="onRefreshAccountList($event)"></accounts-component>
+            </div>
+        </tab>
+        <!-- Preferences -->
+        <tab [active]="activeTabId === 5" (select)="setCurrentTab(5)" [customClass]="">
+            <template tabHeading>
+                 <i class="fa fa-lightbulb-o"></i> Application Access <span *ngIf="activeTabId===5"> {{totalCount}} </span>
+            </template>
+            <div class="container" *ngIf="activeTabId === 5">
+                <application-access [applicationAccessList]="applicationAccessList" (refreshList)="onRefreshApplicationAccessList($event)"
+                    [applicationClaimStatuses]="applicationClaimStatuses" [application]="application" (refreshApplication)="onRefreshApplication($event)"
+                    [applicationStatuses]="applicationStatuses"></application-access>
+            </div>
+        </tab>
+    </tabset>
+</div>
+<!-- /.container -->

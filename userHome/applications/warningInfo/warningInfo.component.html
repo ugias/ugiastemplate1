@@ -1,0 +1,41 @@
+<div class="container">
+	<div class="row">
+		<fieldset>
+			<legend>Notices</legend>
+			<div class="panel-body">
+				<table class="table table-condensed table-striped table-bordered export" id="applicationListTable">
+					<thead>
+						<tr>
+							<th (click)="SortList(1)">Name <i class='{{SortIconClass(1)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>
+							<th (click)="SortList(2)">Comment<i class='{{SortIconClass(2)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let a of applications">
+							<td>
+								{{a.applicationName}}
+							</td>
+							<td *ngIf="a.applicationId !== '00000000-0000-0000-0000-000000000007' && a.applicationId !== 'e9986755-06b9-4616-b82c-cbfc6b94c8fd'">
+								{{a.notification}}
+							</td>
+							<td *ngIf="a.applicationId === '00000000-0000-0000-0000-000000000007'">
+								We have not ported this application to our new Netid site. Please click 
+								<a href='https://netidv3.cecnsw.catholic.edu.au'>HERE</a> and you will be redirected to the old site, where you can
+									log in using your user credentials.
+							</td>
+							<td *ngIf="a.applicationId === 'e9986755-06b9-4616-b82c-cbfc6b94c8fd'">
+								We have not ported this application to our new Netid site. Please click 
+								<a href='https://pgm.cecnsw.catholic.edu.au/pgmapp'>HERE</a> and you will be redirected to the old site, where you can
+									log in using your user credentials.
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<pagination *ngIf="applicationsComponent.pagination.totalItems !== 0" [(ngModel)]="applicationsComponent.pagination.currentPage"
+								class="pagination-sm" [totalItems]="applicationsComponent.pagination.totalItems" [maxSize]="applicationsComponent.pagination.maxSize"
+								[itemsPerPage]="applicationsComponent.pagination.itemsPerPage" (pageChanged)="PageChanged($event)">
+					</pagination>
+			</div>
+		</fieldset>
+	</div>
+</div>

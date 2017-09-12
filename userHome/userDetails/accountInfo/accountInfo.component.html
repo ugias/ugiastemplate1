@@ -1,0 +1,55 @@
+<div class="container container-single-left">
+  <form (ngSubmit)="onAccountEditSubmit()" #displayUserAccountInfoForm="ngForm">
+    <div class="row margin-top-small">
+      <fieldset>
+        <legend>Account Details</legend>
+        <div class="row">
+          <div class="col-md-4 input-label-display">
+            NETiD Account Type :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userDetails.globalRoleCode}}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 input-label-display">
+            Status :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userDetails.accountStatusCode}}
+              <!--<input type="text" class="form-control" required [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel" placeholder="Given Name" (blur)="onInputBlur($event.target.value)">-->
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="userDetails.accountStatusCode !== 'Active'" >
+          <div class="col-md-4 input-label-display">
+            Disable Reason :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userDetails.disableReasonCode}} 
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="userDetails.disableReasonCode === 'Other'" >
+          <div class="col-md-4 input-label-display">
+            Comment :
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              {{userDetails.disableReasonComment}} 
+            </div>
+          </div>
+        </div>
+       <div *ngIf="hasEditPermission" class="row">
+          <div class="col-md-4 col-sm-6 col-xs-6 float-right">
+            <button type="submit" class="btn btn-md btn-success btn-secondary btn-block">Edit</button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>

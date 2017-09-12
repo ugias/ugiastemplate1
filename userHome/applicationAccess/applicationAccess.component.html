@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="row" id="addNewApplicationBlock" [hidden]="!canAddOrEditApplication">
+        <div class="col-md-2 col-sm-3 col-xs-4 float-right">
+            <button type="button" class="btn btn-md btn-info btn-secondary btn-block pull-right" (click)="onApplicationAddClick()"><i class="fa fa-lg fa-plus"></i> Add Application</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container" *ngIf="applicationAddEditMode === true">
+            <appAccess-component [application]="application" (refresh)="onResetEditMode($event)" [applicationClaimStatuses]="applicationClaimStatuses"
+                [applicationStatuses]="applicationStatuses"></appAccess-component>
+        </div>
+        <div class="container" *ngIf="roleAddEditMode === true">
+            <div class="col-md-12 margin-bottom-small"><span class="bold-orange-text">Selected Application: </span> {{selectedApplicationName}}</div>
+            <tabset id="roleAccessTabset">
+                <!-- Group role assignment -->
+                <tab [active]="activeRoleTabId === 0" (select)="onSelectRoleTab(0)" [customClass]="">
+                    <template tabHeading>
+                        <i class="fa fa-tasks"></i> Group
+                    </template>
+                    <div class="container" *ngIf="activeRoleTabId === 0">
+                        <assign-group-roles [applicationClaimListObservable]="applicationClaimListObservable"></assign-group-roles>
+                    </div>
+                </tab>
+                <!-- Individual role assignment -->
+                <tab [active]="activeRoleTabId === 1" (select)="onSelectRoleTab(1)" [customClass]="">
+                    <template tabHeading>
+                        <i class="fa fa-users"></i> Individuals
+                    </template>
+                    <div class="container" *ngIf="activeRoleTabId === 1">
+                        <assign-user-roles [currentApplicationId]="currentApplicationId" [applicationClaimListObservable]="applicationClaimListObservable"></assign-user-roles>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+        <div class="col-md-12">
+            <div class="panel-body">
+                <table class="table table-condensed table-striped table-bordered export" id="applicationAccessListTable">
+                    <thead>
+                        <tr>
+                            <th (click)="SortList(1)" class="sort-column-header">Name <i class='{{SortIconClass(1)}}'></i></th>
+                            <th (click)="SortList(2)" class="sort-column-header">Description <i class='{{SortIconClass(2)}}'></i></th>
+
+                            <th class="button-cell" *ngIf="canAddOrEditApplication">Edit</th>
+                            <th class="button-cell" *ngIf="canAddOrEditApplication">Manage Roles</th>
+                            <th class="button-cell" *ngIf="!canAddOrEditApplication">Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let a of applicationAccessList">
+                            <td>{{a.name}}</td>
+                            <td>{{a.description}}</td>
+                            <td class="button-cell" *ngIf="canAddOrEditApplication">
+                                <div>
+                                    <button type="button" class="btn btn-md btn-success btn-secondary btn-block" (click)="onApplicationEditClick(a.id)" [disabled]="!canAddOrEditApplication">
+                                        
+                                             <i class="fa fa-lg fa-pencil-square-o"> </i> Edit</button>
+                                </div>
+                            </td>
+                            <td class="button-cell" *ngIf="canAddOrEditApplication">
+                                <div>
+                                    <button type="button" class="btn btn-md btn-success btn-secondary btn-block" (click)="onRoleEditClick(a.id)"
+                                        [disabled]="!canAddOrEditApplication">
+                                        <i class="fa fa-lg fa-user-plus"></i> Manage
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="button-cell" *ngIf="!canAddOrEditApplication">
+                                <div>
+                                    <button type="button" class="btn btn-md btn-success btn-secondary btn-block" (click)="onRequestAccessClick(a.id)">
+                                             <i class="fa fa-lg  fa-universal-access"></i> Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination [(ngModel)]="applicationsComponent.pagination.currentPage" class="pagination-sm" [totalItems]="applicationsComponent.pagination.totalItems"
+                    [maxSize]="applicationsComponent.pagination.maxSize" [itemsPerPage]="applicationsComponent.pagination.itemsPerPage"
+                    (pageChanged)="PageChanged($event)">
+                </pagination>
+            </div>
+        </div>
+    </div>
+</div>

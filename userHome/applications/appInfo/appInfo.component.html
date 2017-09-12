@@ -1,0 +1,56 @@
+<div class="container">
+	<div class="row">
+		<fieldset>
+			<legend>Application Access</legend>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-3 input-label">
+						Organisation
+					</div>
+					<div class="col-md-5">
+						<select class="form-control" required [ngModel]="selectedOrganisationId" (ngModelChange)="OrganisationChange($event)" name="selectedOrganisation"
+										#selectedOrganisation="ngModel">
+                			<option *ngFor="let o of organisations" [value]="o.extOrganisationId">{{o.name}}</option>
+              				</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 input-label">
+						Position:<span class="title-Label"> {{position}}</span>
+					</div>
+					<div class="col-md-4 input-label">
+						Email:<span class="title-Label"> {{email}}</span>
+					</div>
+				</div>
+				<table class="table table-condensed table-striped table-bordered export" id="applicationListTable">
+					<thead>
+						<tr>
+							<th (click)="SortList(1)">Name <i class='{{SortIconClass(1)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>
+							<!--<th (click)="SortList(2)">Role(s)<i class='{{SortIconClass(2)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>-->
+							<th (click)="SortList(3)">Access Commences<i class='{{SortIconClass(3)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>
+							<th (click)="SortList(4)">Access Terminates<i class='{{SortIconClass(4)}}' *ngIf="applicationsComponent.pagination.totalItems !== 0"></i></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let a of applications">
+							<td>
+							<a (click)="OnAppWarning()" title="{{a.applicationDescription}}" data-toggle="tooltip" data-placement="top" *ngIf="a.applicationStatusCode !== 'Active'"  >{{a.applicationName}}</a>
+							<a (click)="OnAppNameClick(a.applicationId, a.url)" title="{{a.applicationDescription}}" data-toggle="tooltip" data-placement="top" *ngIf="a.applicationStatusCode === 'Active'">{{a.applicationName}}</a>
+							</td>
+							<!--<td>
+								{{a.roles}}
+							</td>-->
+							<td>{{a.fromDate | date: 'dd/MM/yyyy'}}</td>
+							<td *ngIf="a.toDate !== undefined">{{a.toDate | date: 'dd/MM/yyyy'}}</td>
+							<td *ngIf="a.toDate === undefined">Ongoing</td>
+						</tr>
+					</tbody>
+				</table>
+				<pagination *ngIf="applicationsComponent.pagination.totalItems !== 0" [(ngModel)]="applicationsComponent.pagination.currentPage"
+								class="pagination-sm" [totalItems]="applicationsComponent.pagination.totalItems" [maxSize]="applicationsComponent.pagination.maxSize"
+								[itemsPerPage]="applicationsComponent.pagination.itemsPerPage" (pageChanged)="PageChanged($event)">
+				</pagination>
+			</div>
+		</fieldset>
+	</div>
+</div>
